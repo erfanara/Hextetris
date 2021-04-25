@@ -8,7 +8,6 @@ import javafx.scene.transform.Rotate;
 
 class RegHexagon extends Polygon {
     protected final static double radius = GameBoard.HEXAGON_RADIUS;
-    protected int[] columnRow;
 
     private void addPoints(double[] center) {
         // the amount to rotate for each vertex (in radians)
@@ -23,7 +22,6 @@ class RegHexagon extends Polygon {
 
     RegHexagon(int[] columnRow) {
         this.addPoints(GameBoard.convertToCoord(columnRow));
-        this.columnRow = columnRow;
     }
 
     // TODO : this function is faster than GameBoard.ConvertToCoord() way?
@@ -46,57 +44,31 @@ abstract class HexaMino extends Group {
     void moveDown() {
         this.setTranslateY(this.getTranslateY() + GameBoard.HEXAGON_HEIGHT);
         // this.getTransforms().add(new Translate(0,GameBoard.HEXAGON_HEIGHT));
-        for (RegHexagon i : this.shape) {
-            i.columnRow[1]++;
-        }
+
     }
 
     void moveRight() {
         double[] x1 = this.shape[1].getCoordInScene();
-
+        int[] columnRow = GameBoard.convertToColumnRow(x1);
         double[] x2 = GameBoard
-                .convertToCoord(new int[] { this.shape[1].columnRow[0] + 1, this.shape[1].columnRow[1] });
+                .convertToCoord(new int[] { columnRow[0] + 1, columnRow[1] });
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
-
-        // TODO
-        for (RegHexagon i : this.shape) {
-            i.columnRow[0]++;
-        }
 
     }
 
     void moveLeft() {
         double[] x1 = this.shape[1].getCoordInScene();
-
+        int[] columnRow = GameBoard.convertToColumnRow(x1);
         double[] x2 = GameBoard
-                .convertToCoord(new int[] { this.shape[1].columnRow[0] - 1, this.shape[1].columnRow[1] });
+                .convertToCoord(new int[] { columnRow[0] - 1, columnRow[1] });
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
 
-        // TODO
-        for (RegHexagon i : this.shape) {
-            i.columnRow[0]--;
-        }
     }
 
     void rotateClockWise() {
         this.getTransforms().add(new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]));
-
-        int newColumn, newRow;
-        for (int i = 1; i < this.shape.length; i++) {
-            newColumn = (int) Math.round((this.shape[0].columnRow[0] + this.shape[i].columnRow[0]) / 2.0
-                    + (this.shape[0].columnRow[1] - this.shape[i].columnRow[1])
-                    + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0);
-
-            newRow = (int) Math.round((this.shape[0].columnRow[1] - this.shape[i].columnRow[1]) / 2.0
-                    + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 4.0
-                    - (newColumn % 2 - this.shape[i].columnRow[0] % 2) / 2.0
-                    - 3 * (this.shape[0].columnRow[0] - this.shape[i].columnRow[0]) / 4.0 + this.shape[i].columnRow[1]);
-
-            this.shape[i].columnRow[0] = newColumn;
-            this.shape[i].columnRow[1] = newRow;
-        }
     }
 
 }
