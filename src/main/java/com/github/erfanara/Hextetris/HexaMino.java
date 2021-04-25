@@ -124,7 +124,11 @@ abstract class HexaMino extends Group {
                     || !GameBoard.isEmpty(this.newColumnRows[i - 1][0], this.newColumnRows[i - 1][1])) {
                 return;
             }
-
+        }
+        // TODO : We should find new hexagon that is on top of hexamino
+        for(int i=1;i<this.shape.length;i++){
+            this.shape[i].columnRow[0] = this.newColumnRows[i-1][0]; 
+            this.shape[i].columnRow[1] = this.newColumnRows[i-1][1]; 
         }
 
         this.getTransforms().add(new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]));
@@ -141,11 +145,6 @@ class PurpuleL4 extends HexaMino {
         super(1, 1, 1, 0, 1, 2, 0, 1);
 
         super.firstCoordOfCenter = super.shape[0].getCoordInScene();
-
-        // TODO
-        // super.centerCoord = GameBoard
-        // .getLayout(new int[] { super.shape[centerIndex].getColumn(),
-        // super.shape[centerIndex].getRow() });
 
         for (int i = 0; i < super.shape.length; i++) {
             super.shape[i].setFill(Color.PURPLE);
