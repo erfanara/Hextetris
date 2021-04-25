@@ -7,6 +7,13 @@ class GameBoard {
     final static double HEXAGON_HEIGHT = Math.sqrt(3) * HEXAGON_RADIUS;
     static RegHexagon[][] gameBoard = new RegHexagon[X_SIZE][Y_SIZE];
 
+    /*
+    Checks the specified index of gameBoard that is empty or not
+    */
+    static boolean isEmpty(int column, int row){
+        return gameBoard[column][row] == null;
+    }
+
     static double[] convertToCoord(int[] columnRow) {
         return new double[] { HEXAGON_RADIUS + (HEXAGON_RADIUS*3)/2.0 * columnRow[0],
                 (((columnRow[0] % 2 == 0) ? HEXAGON_HEIGHT / 2.0 : HEXAGON_HEIGHT) + HEXAGON_HEIGHT * columnRow[1]) };

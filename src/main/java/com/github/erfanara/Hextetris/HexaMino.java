@@ -34,16 +34,30 @@ class RegHexagon extends Polygon {
 
 }
 
-// TODO : we doubt about the Group , maybe we should use pane or layout or ?
 abstract class HexaMino extends Group {
     protected RegHexagon[] shape;
     protected double[] firstCoordOfCenter;
 
-    HexaMino() {
+    // For temporary uses in moving methods
+    private int[][] newColumnRows;
 
+    HexaMino(int... hexagonArr) {
+        this.shape = new RegHexagon[hexagonArr.length / 2];
+        for (int i = 0; i < hexagonArr.length / 2; i++) {
+            this.shape[i] = new RegHexagon(new int[] { hexagonArr[i * 2], hexagonArr[i * 2 + 1] });
+            this.getChildren().add(this.shape[i]);
+        }
+
+        newColumnRows = new int[this.shape.length - 1][2];
     }
 
     void moveDown() {
+        // Checking is Move Allowed or not
+        for (RegHexagon i : this.shape) {
+            if (i.columnRow[1] == GameBoard.Y_SIZE - 1 || !GameBoard.isEmpty(i.columnRow[0], i.columnRow[1] + 1))
+                return;
+        }
+
         this.setTranslateY(this.getTranslateY() + GameBoard.HEXAGON_HEIGHT);
         // this.getTransforms().add(new Translate(0,GameBoard.HEXAGON_HEIGHT));
         for (RegHexagon i : this.shape) {
@@ -52,10 +66,15 @@ abstract class HexaMino extends Group {
     }
 
     void moveRight() {
-        double[] x1 = this.shape[1].getCoordInScene();
+        // Checking is Move Allowed or not
+        for (RegHexagon i : this.shape) {
+            if (i.columnRow[0] == GameBoard.X_SIZE - 1)
+                return;
+        }
 
+        double[] x1 = this.shape[1].getCoordInScene();
         double[] x2 = GameBoard
-                .convertToCoord(new int[] { this.shape[1].columnRow[0] + 1, this.shape[1].columnRow[1] });
+                .convertToCoord(new int[] { this.shape[1].columnRow[0] +1 , this.shape[1].columnRow[1] });
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
 
@@ -67,6 +86,12 @@ abstract class HexaMino extends Group {
     }
 
     void moveLeft() {
+        // Checking is Move Allowed or not
+        for (RegHexagon i : this.shape) {
+            if (i.columnRow[0] == 0)
+                return;
+        }
+
         double[] x1 = this.shape[1].getCoordInScene();
 
         double[] x2 = GameBoard
@@ -81,22 +106,28 @@ abstract class HexaMino extends Group {
     }
 
     void rotateClockWise() {
-        this.getTransforms().add(new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]));
-
-        int newColumn, newRow;
         for (int i = 1; i < this.shape.length; i++) {
-            newColumn = (int) Math.round((this.shape[0].columnRow[0] + this.shape[i].columnRow[0]) / 2.0
-                    + (this.shape[0].columnRow[1] - this.shape[i].columnRow[1])
-                    + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0);
+            this.newColumnRows[i - 1][0] = (int) Math
+                    .round((this.shape[0].columnRow[0] + this.shape[i].columnRow[0]) / 2.0
+                            + (this.shape[0].columnRow[1] - this.shape[i].columnRow[1])
+                            + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0);
 
-            newRow = (int) Math.round((this.shape[0].columnRow[1] - this.shape[i].columnRow[1]) / 2.0
-                    + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 4.0
-                    - (newColumn % 2 - this.shape[i].columnRow[0] % 2) / 2.0
-                    - 3 * (this.shape[0].columnRow[0] - this.shape[i].columnRow[0]) / 4.0 + this.shape[i].columnRow[1]);
+            this.newColumnRows[i - 1][1] = (int) Math
+                    .round((this.shape[0].columnRow[1] - this.shape[i].columnRow[1]) / 2.0
+                            + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 4.0
+                            - (this.newColumnRows[i - 1][0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0
+                            - 3 * (this.shape[0].columnRow[0] - this.shape[i].columnRow[0]) / 4.0
+                            + this.shape[i].columnRow[1]);
 
-            this.shape[i].columnRow[0] = newColumn;
-            this.shape[i].columnRow[1] = newRow;
+            if (this.newColumnRows[i - 1][0] < 0 || this.newColumnRows[i - 1][0] >= GameBoard.X_SIZE
+                    || this.newColumnRows[i - 1][1] < 0 || this.newColumnRows[i - 1][1] >= GameBoard.Y_SIZE
+                    || !GameBoard.isEmpty(this.newColumnRows[i - 1][0], this.newColumnRows[i - 1][1])) {
+                return;
+            }
+
         }
+
+        this.getTransforms().add(new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]));
     }
 
 }
@@ -104,15 +135,10 @@ abstract class HexaMino extends Group {
 class PurpuleL4 extends HexaMino {
 
     PurpuleL4() {
-        super.shape = new RegHexagon[4];
-
         // Center of Shape is on index 0
         // Top Hexagon of Shape is on index 1
         // We will save this rule in other methods too
-        super.shape[0] = new RegHexagon(new int[] { 1, 1 });
-        super.shape[1] = new RegHexagon(new int[] { 1, 0 });
-        super.shape[2] = new RegHexagon(new int[] { 1, 2 });
-        super.shape[3] = new RegHexagon(new int[] { 0, 1 });
+        super(1, 1, 1, 0, 1, 2, 0, 1);
 
         super.firstCoordOfCenter = super.shape[0].getCoordInScene();
 
@@ -121,10 +147,9 @@ class PurpuleL4 extends HexaMino {
         // .getLayout(new int[] { super.shape[centerIndex].getColumn(),
         // super.shape[centerIndex].getRow() });
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < super.shape.length; i++) {
             super.shape[i].setFill(Color.PURPLE);
             super.shape[i].setStroke(Color.WHITE);
-            this.getChildren().add(super.shape[i]);
         }
 
     }
