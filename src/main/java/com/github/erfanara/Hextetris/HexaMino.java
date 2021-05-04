@@ -74,12 +74,16 @@ abstract class HexaMino extends Group {
 
         double[] x1 = this.shape[1].getCoordInScene();
         double[] x2 = GameBoard
-                .convertToCoord(new int[] { this.shape[1].columnRow[0] +1 , this.shape[1].columnRow[1] });
+                .convertToCoord(new int[] { this.shape[1].columnRow[0] + 1, this.shape[1].columnRow[1] });
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
 
-        // TODO
+        // changing the ColumnRows of RegHexagons
+        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
         for (RegHexagon i : this.shape) {
+            if (i.columnRow[0] % 2 != columnParityOfTop) {
+                i.columnRow[1] += 1 - 2 * columnParityOfTop;
+            }
             i.columnRow[0]++;
         }
 
@@ -99,8 +103,12 @@ abstract class HexaMino extends Group {
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
 
-        // TODO
+        // changing the ColumnRows of RegHexagons
+        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
         for (RegHexagon i : this.shape) {
+            if (i.columnRow[0] % 2 != columnParityOfTop) {
+                i.columnRow[1] += 1 - 2 * columnParityOfTop;
+            }
             i.columnRow[0]--;
         }
     }
@@ -126,9 +134,9 @@ abstract class HexaMino extends Group {
             }
         }
         // TODO : We should find new hexagon that is on top of hexamino
-        for(int i=1;i<this.shape.length;i++){
-            this.shape[i].columnRow[0] = this.newColumnRows[i-1][0]; 
-            this.shape[i].columnRow[1] = this.newColumnRows[i-1][1]; 
+        for (int i = 1; i < this.shape.length; i++) {
+            this.shape[i].columnRow[0] = this.newColumnRows[i - 1][0];
+            this.shape[i].columnRow[1] = this.newColumnRows[i - 1][1];
         }
 
         this.getTransforms().add(new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]));
