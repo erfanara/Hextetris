@@ -54,7 +54,7 @@ abstract class HexaMino extends Group {
     void moveDown() {
         // Checking is Move Allowed or not
         for (RegHexagon i : this.shape) {
-            if (i.columnRow[1] == GameBoard.Y_SIZE - 1 || !GameBoard.isEmpty(i.columnRow[0], i.columnRow[1] + 1))
+            if (!GameBoard.isEmpty(i.columnRow[0], i.columnRow[1] + 1))
                 return;
         }
 
