@@ -48,7 +48,7 @@ abstract class HexaMino extends Group {
             this.getChildren().add(this.shape[i]);
         }
 
-        newColumnRows = new int[this.shape.length - 1][2];
+        newColumnRows = new int[this.shape.length][2];
     }
 
     void moveDown() {
@@ -66,77 +66,86 @@ abstract class HexaMino extends Group {
     }
 
     void moveRight() {
-        // Checking is Move Allowed or not
-        for (RegHexagon i : this.shape) {
-            if (i.columnRow[0] == GameBoard.X_SIZE - 1)
+        // Copy current columnRows to newColumnRows arr
+        for (int i = 0; i < this.shape.length; i++) {
+            this.newColumnRows[i][0] = this.shape[i].columnRow[0];
+            this.newColumnRows[i][1] = this.shape[i].columnRow[1];
+        }
+        // finding the newColumnRows of RegHexagons for new move
+        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
+        for (int[] columnRow : this.newColumnRows) {
+            if (columnRow[0] % 2 != columnParityOfTop) {
+                columnRow[1] += 1 - 2 * columnParityOfTop;
+            }
+            columnRow[0]++;
+
+            // Now checks the move is allowed or not
+            if (!GameBoard.isEmpty(columnRow[0], columnRow[1]))
                 return;
+        }
+        // copy newColumnRows to current columnRows of RegHexagons
+        for (int i = 0; i < this.shape.length; i++) {
+            this.shape[i].columnRow[0] = this.newColumnRows[i][0];
+            this.shape[i].columnRow[1] = this.newColumnRows[i][1];
         }
 
         double[] x1 = this.shape[1].getCoordInScene();
-        double[] x2 = GameBoard
-                .convertToCoord(new int[] { this.shape[1].columnRow[0] + 1, this.shape[1].columnRow[1] });
+        double[] x2 = GameBoard.convertToCoord(new int[] { this.shape[1].columnRow[0], this.shape[1].columnRow[1] });
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
-
-        // changing the ColumnRows of RegHexagons
-        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
-        for (RegHexagon i : this.shape) {
-            if (i.columnRow[0] % 2 != columnParityOfTop) {
-                i.columnRow[1] += 1 - 2 * columnParityOfTop;
-            }
-            i.columnRow[0]++;
-        }
 
     }
 
     void moveLeft() {
-        // Checking is Move Allowed or not
-        for (RegHexagon i : this.shape) {
-            if (i.columnRow[0] == 0)
+        // Copy current columnRows to newColumnRows arr
+        for (int i = 0; i < this.shape.length; i++) {
+            this.newColumnRows[i][0] = this.shape[i].columnRow[0];
+            this.newColumnRows[i][1] = this.shape[i].columnRow[1];
+        }
+        // finding the newColumnRows of RegHexagons for new move
+        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
+        for (int[] columnRow : this.newColumnRows) {
+            if (columnRow[0] % 2 != columnParityOfTop) {
+                columnRow[1] += 1 - 2 * columnParityOfTop;
+            }
+            columnRow[0]--;
+
+            // Now checks the move is allowed or not
+            if (!GameBoard.isEmpty(columnRow[0], columnRow[1]))
                 return;
+        }
+        // copy newColumnRows to current columnRows of RegHexagons
+        for (int i = 0; i < this.shape.length; i++) {
+            this.shape[i].columnRow[0] = this.newColumnRows[i][0];
+            this.shape[i].columnRow[1] = this.newColumnRows[i][1];
         }
 
         double[] x1 = this.shape[1].getCoordInScene();
-
         double[] x2 = GameBoard
-                .convertToCoord(new int[] { this.shape[1].columnRow[0] - 1, this.shape[1].columnRow[1] });
+                .convertToCoord(new int[] { this.shape[1].columnRow[0], this.shape[1].columnRow[1] });
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
-
-        // changing the ColumnRows of RegHexagons
-        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
-        for (RegHexagon i : this.shape) {
-            if (i.columnRow[0] % 2 != columnParityOfTop) {
-                i.columnRow[1] += 1 - 2 * columnParityOfTop;
-            }
-            i.columnRow[0]--;
-        }
     }
 
     void rotateClockWise() {
         for (int i = 1; i < this.shape.length; i++) {
-            this.newColumnRows[i - 1][0] = (int) Math
-                    .round((this.shape[0].columnRow[0] + this.shape[i].columnRow[0]) / 2.0
-                            + (this.shape[0].columnRow[1] - this.shape[i].columnRow[1])
-                            + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0);
+            this.newColumnRows[i][0] = (int) Math.round((this.shape[0].columnRow[0] + this.shape[i].columnRow[0]) / 2.0
+                    + (this.shape[0].columnRow[1] - this.shape[i].columnRow[1])
+                    + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0);
 
-            this.newColumnRows[i - 1][1] = (int) Math
-                    .round((this.shape[0].columnRow[1] - this.shape[i].columnRow[1]) / 2.0
-                            + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 4.0
-                            - (this.newColumnRows[i - 1][0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0
-                            - 3 * (this.shape[0].columnRow[0] - this.shape[i].columnRow[0]) / 4.0
-                            + this.shape[i].columnRow[1]);
+            this.newColumnRows[i][1] = (int) Math.round((this.shape[0].columnRow[1] - this.shape[i].columnRow[1]) / 2.0
+                    + (this.shape[0].columnRow[0] % 2 - this.shape[i].columnRow[0] % 2) / 4.0
+                    - (this.newColumnRows[i][0] % 2 - this.shape[i].columnRow[0] % 2) / 2.0
+                    - 3 * (this.shape[0].columnRow[0] - this.shape[i].columnRow[0]) / 4.0 + this.shape[i].columnRow[1]);
 
-            if (this.newColumnRows[i - 1][0] < 0 || this.newColumnRows[i - 1][0] >= GameBoard.X_SIZE
-                    || this.newColumnRows[i - 1][1] < 0 || this.newColumnRows[i - 1][1] >= GameBoard.Y_SIZE
-                    || !GameBoard.isEmpty(this.newColumnRows[i - 1][0], this.newColumnRows[i - 1][1])) {
+            // Now checks the move is allowed or not
+            if (!GameBoard.isEmpty(this.newColumnRows[i][0], this.newColumnRows[i][1]))
                 return;
-            }
         }
         // TODO : We should find new hexagon that is on top of hexamino
         for (int i = 1; i < this.shape.length; i++) {
-            this.shape[i].columnRow[0] = this.newColumnRows[i - 1][0];
-            this.shape[i].columnRow[1] = this.newColumnRows[i - 1][1];
+            this.shape[i].columnRow[0] = this.newColumnRows[i][0];
+            this.shape[i].columnRow[1] = this.newColumnRows[i][1];
         }
 
         this.getTransforms().add(new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]));

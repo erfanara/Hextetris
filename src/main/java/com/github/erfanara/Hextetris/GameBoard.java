@@ -8,20 +8,35 @@ class GameBoard {
     static RegHexagon[][] gameBoard = new RegHexagon[X_SIZE][Y_SIZE];
 
     /*
-    Checks the specified index of gameBoard that is empty or not
-    */
-    static boolean isEmpty(int column, int row){
-        return gameBoard[column][row] == null;
+     * Checks the specified index of gameBoard that is in the range of gameBoard
+     * size or not
+     */
+    static boolean isValid(int column, int row) {
+        if (column < 0 || column >= X_SIZE)
+            return false;
+
+        if (row < 0 || row >= Y_SIZE)
+            return false;
+
+        return true;
+    }
+
+    /*
+     * Checks the specified index of gameBoard that is empty or not ,this method
+     * checks if that index is valid or not first.
+     */
+    static boolean isEmpty(int column, int row) {
+        return isValid(column, row) && gameBoard[column][row] == null;
     }
 
     static double[] convertToCoord(int[] columnRow) {
-        return new double[] { HEXAGON_RADIUS + (HEXAGON_RADIUS*3)/2.0 * columnRow[0],
+        return new double[] { HEXAGON_RADIUS + (HEXAGON_RADIUS * 3) / 2.0 * columnRow[0],
                 (((columnRow[0] % 2 == 0) ? HEXAGON_HEIGHT / 2.0 : HEXAGON_HEIGHT) + HEXAGON_HEIGHT * columnRow[1]) };
     }
 
     static int[] convertToColumnRow(double[] coord) {
         int column = (int) ((coord[0] / HEXAGON_RADIUS - 1) * 2 / 3.0);
-        return new int[] { column, (int) ((coord[1] - (column % 2 + 1)/2.0) /  HEXAGON_HEIGHT) };
+        return new int[] { column, (int) ((coord[1] - (column % 2 + 1) / 2.0) / HEXAGON_HEIGHT) };
     }
 
     enum Movement {
