@@ -65,8 +65,8 @@ abstract class HexaMino extends Group {
         }
     }
 
-
-    // TODO : their is todo for moveRight and moveLeft that their is a exception that should be implemented
+    // TODO : their is todo for moveRight and moveLeft that their is a exception
+    // that should be implemented
     // but it was not tidy...
     void moveRight() {
         // Copy current columnRows to newColumnRows arr
@@ -157,7 +157,6 @@ abstract class HexaMino extends Group {
 }
 
 class PurpuleL4 extends HexaMino {
-
     PurpuleL4() {
         // Center of Shape is on index 0
         //////////////////////////// // Top Hexagon of Shape is on index 1
@@ -171,7 +170,107 @@ class PurpuleL4 extends HexaMino {
             super.shape[i].setFill(Color.PURPLE);
             super.shape[i].setStroke(Color.WHITE);
         }
-
     }
+}
 
+class RedStar4 extends HexaMino {
+    RedStar4() {
+        // Center of Shape is on index 0
+        //////////////////////////// // Top Hexagon of Shape is on index 1
+        ////////////////////// // Later we'll change this to the bottom automatically in
+        // rotate method
+        super(1, 1, 1, 0, 2, 2, 0, 2);
+
+        super.firstCoordOfCenter = super.shape[0].getCoordInScene();
+
+        for (int i = 0; i < super.shape.length; i++) {
+            super.shape[i].setFill(Color.rgb(210, 0, 0));
+            super.shape[i].setStroke(Color.WHITE);
+        }
+    }
+}
+
+class Yellowl4 extends HexaMino {
+    Yellowl4() {
+        // Center of Shape is on index 0
+        //////////////////////////// // Top Hexagon of Shape is on index 1
+        ////////////////////// // Later we'll change this to the bottom automatically in
+        // rotate method
+        super(0, 1, 0, 0, 0, 2, 0, 3);
+
+        super.firstCoordOfCenter = super.shape[0].getCoordInScene();
+
+        for (int i = 0; i < super.shape.length; i++) {
+            super.shape[i].setFill(Color.rgb(230, 230, 0));
+            super.shape[i].setStroke(Color.WHITE);
+        }
+    }
+}
+
+class PinkL4 extends HexaMino {
+    PinkL4() {
+        // Center of Shape is on index 0
+        //////////////////////////// // Top Hexagon of Shape is on index 1
+        ////////////////////// // Later we'll change this to the bottom automatically in
+        // rotate method
+        super(0, 1, 0, 0, 1, 0, 0, 2);
+
+        super.firstCoordOfCenter = super.shape[0].getCoordInScene();
+
+        for (int i = 0; i < super.shape.length; i++) {
+            super.shape[i].setFill(Color.PINK);
+            super.shape[i].setStroke(Color.WHITE);
+        }
+    }
+}
+
+class OrangeO4 extends HexaMino {
+    OrangeO4() {
+        // Center of Shape is on index 0
+        //////////////////////////// // Top Hexagon of Shape is on index 1
+        ////////////////////// // Later we'll change this to the bottom automatically in
+        // rotate method
+        super(1, 1, 1, 0, 0, 1, 2, 1);
+
+        super.firstCoordOfCenter = super.shape[0].getCoordInScene();
+
+        for (int i = 0; i < super.shape.length; i++) {
+            super.shape[i].setFill(Color.ORANGE);
+            super.shape[i].setStroke(Color.WHITE);
+        }
+    }
+}
+
+class GreenZ4 extends HexaMino {
+    GreenZ4() {
+        // Center of Shape is on index 0
+        //////////////////////////// // Top Hexagon of Shape is on index 1
+        ////////////////////// // Later we'll change this to the bottom automatically in
+        // rotate method
+        super(1, 1, 1, 0, 0, 2, 0, 3);
+
+        super.firstCoordOfCenter = super.shape[0].getCoordInScene();
+
+        for (int i = 0; i < super.shape.length; i++) {
+            super.shape[i].setFill(Color.GREEN);
+            super.shape[i].setStroke(Color.WHITE);
+        }
+    }
+}
+
+class BlueJ4 extends HexaMino {
+    BlueJ4() {
+        // Center of Shape is on index 0
+        //////////////////////////// // Top Hexagon of Shape is on index 1
+        ////////////////////// // Later we'll change this to the bottom automatically in
+        // rotate method
+        super(0, 2, 0, 0, 0, 1, 1, 2);
+
+        super.firstCoordOfCenter = super.shape[0].getCoordInScene();
+
+        for (int i = 0; i < super.shape.length; i++) {
+            super.shape[i].setFill(Color.NAVY);
+            super.shape[i].setStroke(Color.WHITE);
+        }
+    }
 }

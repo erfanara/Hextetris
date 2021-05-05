@@ -37,45 +37,6 @@ class GameBoard {
         DOWN, RIGHT, LEFT, ROTATE;
     }
 
-    // static boolean isMoveAllowed(HexaMino a, Movement x) {
-    // // for (RegHexagon i : a.shape) {
-    // // if(i.getRow()== Y_SIZE-1 || i.getColumn()==X_SIZE-1 )
-    // // return false;
-    // // }
-    // switch (x) {
-    // case DOWN:
-    // for (RegHexagon i : a.shape) {
-    // if (i.getRow() == Y_SIZE - 1)
-    // return false;
-    // }
-    // break;
-    // case RIGHT:
-    // for (RegHexagon i : a.shape) {
-    // if (i.getColumn() == X_SIZE - 1)
-    // return false;
-    // }
-    // break;
-    // case LEFT:
-    // for (RegHexagon i : a.shape) {
-    // if (i.getColumn() == 0)
-    // return false;
-    // }
-    // break;
-    // case ROTATE:
-    // for (RegHexagon i : a.shape) {
-    // if (i.getRow() == Y_SIZE - 1 || i.getColumn() == X_SIZE - 1 || i.getColumn()
-    // == 0)
-    // return false;
-    // }
-    // break;
-
-    // default:
-    // break;
-    // }
-
-    // return true;
-    // }
-
     static void clearBoard() {
 
     }

@@ -2,18 +2,20 @@
 
 package com.github.erfanara.Hextetris;
 
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -28,16 +30,23 @@ public class Hextetris extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        PurpuleL4 a = new PurpuleL4();
+        // PurpuleL4 a = new PurpuleL4();
+        // RedStar4 a = new RedStar4();
+        // Yellowl4 a = new Yellowl4();
+        // PinkL4 a = new PinkL4();
+        // OrangeO4 a = new OrangeO4();
+        // GreenZ4 a = new GreenZ4();
+        BlueJ4 a = new BlueJ4();
 
         // Group root = new Group();
         Pane root = new Pane();
+        Separator sep = new Separator(Orientation.VERTICAL);
         Pane rightPane = new Pane();
 
         HBox.setHgrow(root, Priority.NEVER);
         HBox.setHgrow(rightPane, Priority.NEVER);
 
-        HBox hBox = new HBox(root, rightPane);
+        HBox hBox = new HBox(root, sep, rightPane);
 
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 21; j++) {
@@ -47,48 +56,30 @@ public class Hextetris extends Application {
 
         root.getChildren().add(a);
 
-        // for (int i = 0; i < GameBoard.Y_SIZE - 3; i++) {
-        // a.moveDown();
-        // }
-
-        // for (RegHexagon i : a.shape) {
-        // System.out.println(i.getColumnRow()[0] + " " + i.getColumnRow()[1]);
-        // System.out.println(i.getCoordInScene()[0] + " " + i.getCoordInScene()[1]);
-        // }
         Timeline tl = new Timeline(new KeyFrame(new Duration(1000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                for (RegHexagon i : a.shape) {
-                    // System.out.println(i.getCoordInScene()[0] + " " + i.getCoordInScene()[1]);
-                }
-                System.out.println("------------------------");
                 a.moveDown();
             };
         }));
-        tl.setCycleCount(2);
-        // tl.play();
-        // System.out.println("H= " + GameBoard.HEXAGON_HEIGHT);
-        // System.out.println("R= " + GameBoard.HEXAGON_RADIUS);
+        tl.setCycleCount(Timeline.INDEFINITE);
+        tl.play();
 
         Scene x = new Scene(hBox);
 
         x.setOnKeyPressed(e -> {
             switch (e.getCode()) {
             case W:
-                // if (GameBoard.isMoveAllowed(a, Movement.ROTATE))
-                    a.rotateClockWise();
+                a.rotateClockWise();
                 break;
             case D:
-                // if (GameBoard.isMoveAllowed(a, Movement.RIGHT))
-                    a.moveRight();
+                a.moveRight();
                 break;
             case A:
-                // if (GameBoard.isMoveAllowed(a, Movement.LEFT))
-                    a.moveLeft();
+                a.moveLeft();
                 break;
             case S:
-                // if (GameBoard.isMoveAllowed(a, Movement.DOWN))
-                    a.moveDown();
+                a.moveDown();
                 break;
 
             default:
