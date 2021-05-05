@@ -7,26 +7,20 @@ class GameBoard {
     final static double HEXAGON_HEIGHT = Math.sqrt(3) * HEXAGON_RADIUS;
     static RegHexagon[][] gameBoard = new RegHexagon[X_SIZE][Y_SIZE];
 
-    /*
-     * Checks the specified index of gameBoard that is in the range of gameBoard
-     * size or not
-     */
-    static boolean isValid(int column, int row) {
-        if (column < 0 || column >= X_SIZE)
-            return false;
-
-        if (row < 0 || row >= Y_SIZE)
-            return false;
-
-        return true;
+    static boolean verticRangeValidation(int row) {
+        return (row >= 0 && row < Y_SIZE);
     }
 
-    /*
-     * Checks the specified index of gameBoard that is empty or not ,this method
-     * checks if that index is valid or not first.
-     */
+    static boolean horizonRangeValidation(int column) {
+        return (column >= 0 && column < X_SIZE);
+    }
+
     static boolean isEmpty(int column, int row) {
-        return isValid(column, row) && gameBoard[column][row] == null;
+        return gameBoard[column][row] == null;
+    }
+
+    static boolean isValidAndEmpty(int column, int row) {
+        return verticRangeValidation(row) && horizonRangeValidation(column) && isEmpty(column, row);
     }
 
     static double[] convertToCoord(int[] columnRow) {

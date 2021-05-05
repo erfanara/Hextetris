@@ -54,7 +54,7 @@ abstract class HexaMino extends Group {
     void moveDown() {
         // Checking is Move Allowed or not
         for (RegHexagon i : this.shape) {
-            if (!GameBoard.isEmpty(i.columnRow[0], i.columnRow[1] + 1))
+            if (!GameBoard.isValidAndEmpty(i.columnRow[0], i.columnRow[1] + 1))
                 return;
         }
 
@@ -65,6 +65,9 @@ abstract class HexaMino extends Group {
         }
     }
 
+
+    // TODO : their is todo for moveRight and moveLeft that their is a exception that should be implemented
+    // but it was not tidy...
     void moveRight() {
         // Copy current columnRows to newColumnRows arr
         for (int i = 0; i < this.shape.length; i++) {
@@ -72,15 +75,15 @@ abstract class HexaMino extends Group {
             this.newColumnRows[i][1] = this.shape[i].columnRow[1];
         }
         // finding the newColumnRows of RegHexagons for new move
-        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
+        byte parityOf1 = (byte) (this.shape[1].columnRow[0] % 2);
         for (int[] columnRow : this.newColumnRows) {
-            if (columnRow[0] % 2 != columnParityOfTop) {
-                columnRow[1] += 1 - 2 * columnParityOfTop;
+            if (columnRow[0] % 2 != parityOf1) {
+                columnRow[1] += 1 - 2 * parityOf1;
             }
             columnRow[0]++;
 
             // Now checks the move is allowed or not
-            if (!GameBoard.isEmpty(columnRow[0], columnRow[1]))
+            if (!GameBoard.isValidAndEmpty(columnRow[0], columnRow[1]))
                 return;
         }
         // copy newColumnRows to current columnRows of RegHexagons
@@ -103,16 +106,17 @@ abstract class HexaMino extends Group {
             this.newColumnRows[i][1] = this.shape[i].columnRow[1];
         }
         // finding the newColumnRows of RegHexagons for new move
-        byte columnParityOfTop = (byte) (this.shape[1].columnRow[0] % 2);
+        byte parityOf1 = (byte) (this.shape[1].columnRow[0] % 2);
         for (int[] columnRow : this.newColumnRows) {
-            if (columnRow[0] % 2 != columnParityOfTop) {
-                columnRow[1] += 1 - 2 * columnParityOfTop;
+            if (columnRow[0] % 2 != parityOf1) {
+                columnRow[1] += 1 - 2 * parityOf1;
             }
             columnRow[0]--;
 
             // Now checks the move is allowed or not
-            if (!GameBoard.isEmpty(columnRow[0], columnRow[1]))
+            if (!GameBoard.isValidAndEmpty(columnRow[0], columnRow[1]))
                 return;
+
         }
         // copy newColumnRows to current columnRows of RegHexagons
         for (int i = 0; i < this.shape.length; i++) {
@@ -121,8 +125,7 @@ abstract class HexaMino extends Group {
         }
 
         double[] x1 = this.shape[1].getCoordInScene();
-        double[] x2 = GameBoard
-                .convertToCoord(new int[] { this.shape[1].columnRow[0], this.shape[1].columnRow[1] });
+        double[] x2 = GameBoard.convertToCoord(new int[] { this.shape[1].columnRow[0], this.shape[1].columnRow[1] });
         this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
         this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
     }
@@ -139,10 +142,10 @@ abstract class HexaMino extends Group {
                     - 3 * (this.shape[0].columnRow[0] - this.shape[i].columnRow[0]) / 4.0 + this.shape[i].columnRow[1]);
 
             // Now checks the move is allowed or not
-            if (!GameBoard.isEmpty(this.newColumnRows[i][0], this.newColumnRows[i][1]))
+            if (!GameBoard.isValidAndEmpty(this.newColumnRows[i][0], this.newColumnRows[i][1]))
                 return;
         }
-        // TODO : We should find new hexagon that is on top of hexamino
+
         for (int i = 1; i < this.shape.length; i++) {
             this.shape[i].columnRow[0] = this.newColumnRows[i][0];
             this.shape[i].columnRow[1] = this.newColumnRows[i][1];
@@ -157,8 +160,9 @@ class PurpuleL4 extends HexaMino {
 
     PurpuleL4() {
         // Center of Shape is on index 0
-        // Top Hexagon of Shape is on index 1
-        // We will save this rule in other methods too
+        //////////////////////////// // Top Hexagon of Shape is on index 1
+        ////////////////////// // Later we'll change this to the bottom automatically in
+        // rotate method
         super(1, 1, 1, 0, 1, 2, 0, 1);
 
         super.firstCoordOfCenter = super.shape[0].getCoordInScene();
