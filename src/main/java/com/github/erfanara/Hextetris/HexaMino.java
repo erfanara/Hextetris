@@ -32,6 +32,10 @@ class RegHexagon extends Polygon {
         return new double[] { boundInScene.getCenterX(), boundInScene.getCenterY() };
     }
 
+    void remove(){
+        ((HexaMino)(this.getParent())).remove(this);
+    }
+
 }
 
 abstract class HexaMino extends Group {
@@ -51,11 +55,15 @@ abstract class HexaMino extends Group {
         newColumnRows = new int[this.shape.length][2];
     }
 
-    void moveDown() {
+    void remove(RegHexagon a){
+        this.getChildren().remove(a);
+    }
+
+    boolean moveDown() {
         // Checking is Move Allowed or not
         for (RegHexagon i : this.shape) {
             if (!GameBoard.isValidAndEmpty(i.columnRow[0], i.columnRow[1] + 1))
-                return;
+                return false;
         }
 
         this.setTranslateY(this.getTranslateY() + GameBoard.HEXAGON_HEIGHT);
@@ -63,6 +71,7 @@ abstract class HexaMino extends Group {
         for (RegHexagon i : this.shape) {
             i.columnRow[1]++;
         }
+        return true;
     }
 
     // TODO : their is todo for moveRight and moveLeft that their is a exception

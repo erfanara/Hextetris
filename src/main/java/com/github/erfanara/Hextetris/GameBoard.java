@@ -1,6 +1,8 @@
 package com.github.erfanara.Hextetris;
 
-class GameBoard {
+import java.util.ArrayList;
+
+final class GameBoard {
     final static int X_SIZE = 15;
     final static int Y_SIZE = 21;
     final static double HEXAGON_RADIUS = 20;
@@ -33,16 +35,39 @@ class GameBoard {
         return new int[] { column, (int) ((coord[1] - (column % 2 + 1) / 2.0) / HEXAGON_HEIGHT) };
     }
 
-    enum Movement {
-        DOWN, RIGHT, LEFT, ROTATE;
+    static void submit(HexaMino a) {
+        for (RegHexagon i : a.shape) {
+            gameBoard[i.columnRow[0]][i.columnRow[1]] = i;
+        }
     }
 
-    static void clearBoard() {
-
+    static boolean isRowCompleted(int row) {
+        for (int column = 0; column < X_SIZE; column++) {
+            if (isEmpty(column, row))
+                return false;
+        }
+        return true;
     }
 
-    static void completedHorizon() {
+    static ArrayList<Integer> getCompletedRows() {
+        ArrayList<Integer> completedRows = new ArrayList<Integer>();
+        for (int row = 0; row < Y_SIZE; row++) {
+            if (isRowCompleted(row))
+                completedRows.add(row);
+        }
 
+        return completedRows;
+    }
+
+    static void clearCompletedRows() {
+        ArrayList<Integer> completedRows = getCompletedRows();
+        for (int row : completedRows) {
+            for (int column=0; column < X_SIZE; column++) {
+                gameBoard[column][row].remove();
+            }
+            // TODO : now all hexagons above , should move down until they can't
+            // mabe we need to redefine a new movedown method for hexagons
+        }
     }
 
 }
