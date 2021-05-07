@@ -32,8 +32,13 @@ class RegHexagon extends Polygon {
         return new double[] { boundInScene.getCenterX(), boundInScene.getCenterY() };
     }
 
-    void remove(){
-        ((HexaMino)(this.getParent())).remove(this);
+    void remove() {
+        ((HexaMino) (this.getParent())).remove(this);
+    }
+
+    void moveDown() {
+        this.setLayoutY(this.getLayoutY() + GameBoard.HEXAGON_HEIGHT);
+        this.columnRow[1]++;
     }
 
 }
@@ -55,7 +60,7 @@ abstract class HexaMino extends Group {
         newColumnRows = new int[this.shape.length][2];
     }
 
-    void remove(RegHexagon a){
+    void remove(RegHexagon a) {
         this.getChildren().remove(a);
     }
 
@@ -66,8 +71,7 @@ abstract class HexaMino extends Group {
                 return false;
         }
 
-        this.setTranslateY(this.getTranslateY() + GameBoard.HEXAGON_HEIGHT);
-        // this.getTransforms().add(new Translate(0,GameBoard.HEXAGON_HEIGHT));
+        this.setLayoutY(this.getLayoutY() + GameBoard.HEXAGON_HEIGHT);
         for (RegHexagon i : this.shape) {
             i.columnRow[1]++;
         }
@@ -103,9 +107,8 @@ abstract class HexaMino extends Group {
 
         double[] x1 = this.shape[1].getCoordInScene();
         double[] x2 = GameBoard.convertToCoord(new int[] { this.shape[1].columnRow[0], this.shape[1].columnRow[1] });
-        this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
-        this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
-
+        this.setLayoutX(this.getLayoutX() + (x2[0] - x1[0]));
+        this.setLayoutY(this.getLayoutY() + (x2[1] - x1[1]));
     }
 
     void moveLeft() {
@@ -135,8 +138,8 @@ abstract class HexaMino extends Group {
 
         double[] x1 = this.shape[1].getCoordInScene();
         double[] x2 = GameBoard.convertToCoord(new int[] { this.shape[1].columnRow[0], this.shape[1].columnRow[1] });
-        this.setTranslateX(this.getTranslateX() + (x2[0] - x1[0]));
-        this.setTranslateY(this.getTranslateY() + (x2[1] - x1[1]));
+        this.setLayoutX(this.getLayoutX() + (x2[0] - x1[0]));
+        this.setLayoutY(this.getLayoutY() + (x2[1] - x1[1]));
     }
 
     void rotateClockWise() {
@@ -160,7 +163,10 @@ abstract class HexaMino extends Group {
             this.shape[i].columnRow[1] = this.newColumnRows[i][1];
         }
 
-        this.getTransforms().add(new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]));
+        for (RegHexagon i : this.shape) {
+            Rotate x = new Rotate(60, firstCoordOfCenter[0], firstCoordOfCenter[1]);
+            i.getTransforms().add(x);
+        }
     }
 
 }

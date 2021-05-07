@@ -1,13 +1,22 @@
 package com.github.erfanara.Hextetris;
 
-import java.util.ArrayList;
-
 final class GameBoard {
     final static int X_SIZE = 15;
     final static int Y_SIZE = 21;
     final static double HEXAGON_RADIUS = 20;
     final static double HEXAGON_HEIGHT = Math.sqrt(3) * HEXAGON_RADIUS;
     static RegHexagon[][] gameBoard = new RegHexagon[X_SIZE][Y_SIZE];
+
+    static void print() {
+        for (int i = 0; i < Y_SIZE; i++) {
+            for (int j = 0; j < X_SIZE; j++) {
+                System.out.print((gameBoard[j][i] == null) ? "0" : "1");
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
+        System.out.println("---------------------------------------------");
+    }
 
     static boolean verticRangeValidation(int row) {
         return (row >= 0 && row < Y_SIZE);
@@ -49,24 +58,43 @@ final class GameBoard {
         return true;
     }
 
-    static ArrayList<Integer> getCompletedRows() {
-        ArrayList<Integer> completedRows = new ArrayList<Integer>();
-        for (int row = 0; row < Y_SIZE; row++) {
-            if (isRowCompleted(row))
-                completedRows.add(row);
+    static int getFirstCompletedRow() {
+        for (int row = Y_SIZE - 1; row >= 0; row--) {
+            if (isRowCompleted(row)) {
+                return row;
+            }
         }
+        return -1;
+    }
 
-        return completedRows;
+    static void moveHexagonDown(int column, int row) {
+        gameBoard[column][row].moveDown();
+        gameBoard[column][row + 1] = gameBoard[column][row];
+        gameBoard[column][row] = null;
+    }
+
+    static void removeHexagon(int column, int row) {
+        gameBoard[column][row].remove();
+        gameBoard[column][row] = null;
     }
 
     static void clearCompletedRows() {
-        ArrayList<Integer> completedRows = getCompletedRows();
-        for (int row : completedRows) {
-            for (int column=0; column < X_SIZE; column++) {
-                gameBoard[column][row].remove();
+        while (true) {
+            int row = getFirstCompletedRow();
+            if (row != -1) {
+                for (int column = 0; column < X_SIZE; column++) {
+                    removeHexagon(column, row);
+                }
+                // now all hexagons above , should moved down
+                for (int upperRow = row - 1; upperRow >= 0; upperRow--) {
+                    for (int column = 0; column < X_SIZE; column++) {
+                        if (!isEmpty(column, upperRow))
+                            moveHexagonDown(column, upperRow);
+                    }
+                }
+            } else {
+                return;
             }
-            // TODO : now all hexagons above , should move down until they can't
-            // mabe we need to redefine a new movedown method for hexagons
         }
     }
 
