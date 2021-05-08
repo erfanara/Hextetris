@@ -1,8 +1,19 @@
-// HAZARD :::> TODO : we should split the project to many packages
+// :::> TODO : we should split the project to many packages
+// :::> TODO : cleaning up Hextetris
+// :::> TODO : removing shape[] from hexamino
+// :::> TODO : setting for game in json or yaml file (GameBoard)
+// :::> TODO : Game Over page (reload page)
+// :::> TODO : Score
+// :::> TODO : cleaning up the whole project
+// :::> TODO : more methods in Hextetris
+// :::> TODO : Automation in newHexamino method
+
 
 package com.github.erfanara.Hextetris;
 
 import java.util.Random;
+
+import com.github.erfanara.Hextetris.HexaminoShapes.*;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -38,8 +49,8 @@ public class Hextetris extends Application {
         this.moveDownNotWorked = moveDownNotWorked;
     }
 
-    HexaMino newHexaMino() {
-        HexaMino a = new PurpuleL4();
+    Hexamino newHexaMino() {
+        Hexamino a = new PurpuleL4();
 
         Random r = new Random();
         switch (r.nextInt(7)) {
@@ -73,7 +84,7 @@ public class Hextetris extends Application {
 
     Timeline tl;
     Pane pane;
-    HexaMino b;
+    Hexamino b;
     static boolean switch1 = true;
 
     void pp() {
@@ -115,7 +126,10 @@ public class Hextetris extends Application {
                     moveDownNotWorked();
                 }
                 if (moveDownNotWorked == 2) {
-                    GameBoard.submit(b);
+                    if(!GameBoard.submit(b)){
+                        tl.pause();
+                        System.exit(0);
+                    }
                     // GameBoard.print();
                     GameBoard.clearCompletedRows();
                     b = newHexaMino();

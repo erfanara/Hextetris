@@ -1,10 +1,15 @@
 package com.github.erfanara.Hextetris;
 
-final class GameBoard {
-    final static int X_SIZE = 15;
-    final static int Y_SIZE = 21;
-    final static double HEXAGON_RADIUS = 20;
-    final static double HEXAGON_HEIGHT = Math.sqrt(3) * HEXAGON_RADIUS;
+import com.github.erfanara.Hextetris.HexaminoShapes.Hexamino;
+import com.github.erfanara.Hextetris.HexaminoShapes.RegHexagon;
+
+import javafx.scene.Node;
+
+public final class GameBoard {
+    public final static int X_SIZE = 15;
+    public final static int Y_SIZE = 21;
+    public final static double HEXAGON_RADIUS = 20;
+    public final static double HEXAGON_HEIGHT = Math.sqrt(3) * HEXAGON_RADIUS;
     static RegHexagon[][] gameBoard = new RegHexagon[X_SIZE][Y_SIZE];
 
     static void print() {
@@ -30,11 +35,11 @@ final class GameBoard {
         return gameBoard[column][row] == null;
     }
 
-    static boolean isValidAndEmpty(int column, int row) {
+    public static boolean isValidAndEmpty(int column, int row) {
         return verticRangeValidation(row) && horizonRangeValidation(column) && isEmpty(column, row);
     }
 
-    static double[] convertToCoord(int[] columnRow) {
+    public static double[] convertToCoord(int[] columnRow) {
         return new double[] { HEXAGON_RADIUS + (HEXAGON_RADIUS * 3) / 2.0 * columnRow[0],
                 (((columnRow[0] % 2 == 0) ? HEXAGON_HEIGHT / 2.0 : HEXAGON_HEIGHT) + HEXAGON_HEIGHT * columnRow[1]) };
     }
@@ -44,10 +49,15 @@ final class GameBoard {
         return new int[] { column, (int) ((coord[1] - (column % 2 + 1) / 2.0) / HEXAGON_HEIGHT) };
     }
 
-    static void submit(HexaMino a) {
-        for (RegHexagon i : a.shape) {
-            gameBoard[i.columnRow[0]][i.columnRow[1]] = i;
+    static boolean submit(Hexamino a) {
+        for (Node i : a.getChildren()) {
+            RegHexagon k = ((RegHexagon) (i));
+            if (isEmpty(k.getColumn(), k.getRow()))
+                gameBoard[k.getColumn()][k.getRow()] = k;
+            else
+                return false;
         }
+        return true;
     }
 
     static boolean isRowCompleted(int row) {
