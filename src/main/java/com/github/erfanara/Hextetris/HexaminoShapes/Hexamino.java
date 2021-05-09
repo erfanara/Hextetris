@@ -6,7 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.transform.Rotate;
 
 public abstract class Hexamino extends Group {
-    protected RegHexagon[] shape;
+    public RegHexagon[] shape;
     protected double[] firstCoordOfCenter;
 
     // For temporary uses in moving methods
@@ -20,7 +20,7 @@ public abstract class Hexamino extends Group {
         }
 
         newColumnRows = new int[this.shape.length][2];
-        
+
         this.firstCoordOfCenter = this.shape[0].getCoordInScene();
     }
 
@@ -42,9 +42,6 @@ public abstract class Hexamino extends Group {
         return true;
     }
 
-    // TODO : their is todo for moveRight and moveLeft that their is a exception
-    // that should be implemented
-    // but it was not tidy...
     public void moveRight() {
         // Copy current columnRows to newColumnRows arr
         for (int i = 0; i < this.shape.length; i++) {
@@ -106,6 +103,10 @@ public abstract class Hexamino extends Group {
         this.setLayoutY(this.getLayoutY() + (x2[1] - x1[1]));
     }
 
+    /*
+     * This function has a special formula to calculate the new column Row of the
+     * hexagons
+     */
     public void rotateClockWise() {
         for (int i = 1; i < this.shape.length; i++) {
             this.newColumnRows[i][0] = (int) Math.round((this.shape[0].columnRow[0] + this.shape[i].columnRow[0]) / 2.0

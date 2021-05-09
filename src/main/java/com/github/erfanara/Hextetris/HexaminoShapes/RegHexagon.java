@@ -5,6 +5,9 @@ import com.github.erfanara.Hextetris.GameBoard;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Polygon;
 
+/*
+    Regular Hexagon using Polygon
+*/
 public class RegHexagon extends Polygon {
     protected final static double radius = GameBoard.HEXAGON_RADIUS;
     protected int[] columnRow;
@@ -47,5 +50,4 @@ public class RegHexagon extends Polygon {
         this.setLayoutY(this.getLayoutY() + GameBoard.HEXAGON_HEIGHT);
         this.columnRow[1]++;
     }
-
 }

@@ -3,25 +3,15 @@ package com.github.erfanara.Hextetris;
 import com.github.erfanara.Hextetris.HexaminoShapes.Hexamino;
 import com.github.erfanara.Hextetris.HexaminoShapes.RegHexagon;
 
-import javafx.scene.Node;
-
+/*
+    This class contains the main logic of the game
+*/
 public final class GameBoard {
     public final static int X_SIZE = 15;
     public final static int Y_SIZE = 21;
     public final static double HEXAGON_RADIUS = 20;
     public final static double HEXAGON_HEIGHT = Math.sqrt(3) * HEXAGON_RADIUS;
     static RegHexagon[][] gameBoard = new RegHexagon[X_SIZE][Y_SIZE];
-
-    static void print() {
-        for (int i = 0; i < Y_SIZE; i++) {
-            for (int j = 0; j < X_SIZE; j++) {
-                System.out.print((gameBoard[j][i] == null) ? "0" : "1");
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
-        System.out.println("---------------------------------------------");
-    }
 
     static boolean verticRangeValidation(int row) {
         return (row >= 0 && row < Y_SIZE);
@@ -44,14 +34,8 @@ public final class GameBoard {
                 (((columnRow[0] % 2 == 0) ? HEXAGON_HEIGHT / 2.0 : HEXAGON_HEIGHT) + HEXAGON_HEIGHT * columnRow[1]) };
     }
 
-    static int[] convertToColumnRow(double[] coord) {
-        int column = (int) ((coord[0] / HEXAGON_RADIUS - 1) * 2 / 3.0);
-        return new int[] { column, (int) ((coord[1] - (column % 2 + 1) / 2.0) / HEXAGON_HEIGHT) };
-    }
-
     static boolean submit(Hexamino a) {
-        for (Node i : a.getChildren()) {
-            RegHexagon k = ((RegHexagon) (i));
+        for (RegHexagon k : a.shape) {
             if (isEmpty(k.getColumn(), k.getRow()))
                 gameBoard[k.getColumn()][k.getRow()] = k;
             else
@@ -88,7 +72,7 @@ public final class GameBoard {
         gameBoard[column][row] = null;
     }
 
-    static void clearCompletedRows() {
+    static boolean clearCompletedRows() {
         while (true) {
             int row = getFirstCompletedRow();
             if (row != -1) {
@@ -102,8 +86,9 @@ public final class GameBoard {
                             moveHexagonDown(column, upperRow);
                     }
                 }
+                return true;
             } else {
-                return;
+                return false;
             }
         }
     }
