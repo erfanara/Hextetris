@@ -1,7 +1,0 @@
-{
-    "java.debug.settings.vmArgs": "--module-path /usr/lib/jvm/java-15-openjdk/lib/javafx.graphics.jar:/usr/lib/jvm/java-15-openjdk/lib/javafx.web.jar:/usr/lib/jvm/java-15-openjdk/lib/javafx.media.jar:/usr/lib/jvm/java-15-openjdk/lib/javafx.controls.jar:/usr/lib/jvm/java-15-openjdk/lib/javafx.swing.jar:/usr/lib/jvm/java-15-openjdk/lib/javafx.base.jar:/usr/lib/jvm/java-15-openjdk/lib/javafx.fxml.jar: --add-modules javafx.controls",
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "code-runner.executorMap": {
-        "java": "cd $workspaceRoot && mvn javafx:run -f \"$workspaceRoot/pom.xml\"",
-    }
-}
